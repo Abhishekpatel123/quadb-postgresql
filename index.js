@@ -36,7 +36,7 @@ app.get("/get-data", async (req, res) => {
     res.status(200).send({ data: data.rows, db: process.env.DATABASE_URL });
   } catch (error) {
     console.log(error);
-    res.send({ message: "server error", db: process.env.DATABASE_URL });
+    res.send({ message: "server error", error });
   }
 });
 
