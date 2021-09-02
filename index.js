@@ -19,12 +19,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-app.get("/hello", (req, res) => {
-  res.send("hello world");
-});
+// reading data from db
 app.get("/get-data", async (req, res) => {
   try {
-    const data = await pool.query(`SELECT * from `);
+    const data = await pool.query(`SELECT * from blockchain_tb`);
     res.status(200).send({ data });
   } catch (error) {
     res.status(500).send({ message: "server error" });
@@ -37,18 +35,28 @@ const insert = async () => {
   const result = await jsonResult.json();
   const values = Object.values(result);
 
-  values.forEach(async (item, index) => {
+  const data = null;
+  await values.forEach(async (item, index) => {
     // console.log(item.values());
     if (index === 10) return;
     // console.log(item)
-    await pool.query(
-      `INSERT INTO users( name, last, buy, sell, volume, base_unit )
+    data = await pool.query(
+      `INSERT INTO blockchain_tb( name, last, buy, sell, volume, base_unit )
          VALUES($1, $2 , $3 , $4 , $5 , $6) RETURNING *`,
       [item.name, item.last, item.buy, item.sell, item.volume, item.base_unit]
     );
   });
+
+  return data;
 };
-// insert();
+
+app.get("/insert-data", async (req, res) => {
+  try {
+    await insert();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 // listening
 app.listen(PORT, () => console.log(`listening at prot ${PORT}`));
