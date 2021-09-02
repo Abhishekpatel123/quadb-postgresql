@@ -51,6 +51,9 @@ const insert = async () => {
   return data;
 };
 
+app.get("/hello", (req, res) => {
+  res.send("hello world ");
+});
 app.get("/insert-data", async (req, res) => {
   try {
     await insert();
