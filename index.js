@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(express.static("client/build"));
+
 if (process.env.NODE_ENV === "production") {
   // serve static content
   app.use(express.static("client/build"));
@@ -50,7 +52,7 @@ const insert = async () => {
   const result = await jsonResult.json();
   const values = Object.values(result);
 
-  values.forEach((item, index) => {
+  values.forEach(async (item, index) => {
     // console.log(item.values());
     if (index === 10) return;
     // console.log(item)
@@ -61,7 +63,7 @@ const insert = async () => {
     );
   });
 };
-insert();
+// insert();
 
 // listening
 app.listen(PORT, () => console.log(`listening at prot ${PORT}`));
