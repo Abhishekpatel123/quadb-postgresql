@@ -21,9 +21,11 @@ if (process.env.NODE_ENV === "production") {
 // reading data from db
 app.get("/get-data", async (req, res) => {
   try {
+    console.log("getting data");
     const data = await pool.query(`SELECT * from blockchain_tb`);
     res.status(200).send({ data });
   } catch (error) {
+    console.log(error);
     res.status(500).send({ message: "server error" });
   }
 });
@@ -33,10 +35,11 @@ const insert = async () => {
   const jsonResult = await fetch("https://api.wazirx.com/api/v2/tickers");
   const result = await jsonResult.json();
   const values = Object.values(result);
-
+  console.log(values);
   const data = null;
   await values.forEach(async (item, index) => {
     // console.log(item.values());
+    console.log("item ", item);
     if (index === 10) return;
     // console.log(item)
     data = await pool.query(
@@ -45,7 +48,6 @@ const insert = async () => {
       [item.name, item.last, item.buy, item.sell, item.volume, item.base_unit]
     );
   });
-
   return data;
 };
 
