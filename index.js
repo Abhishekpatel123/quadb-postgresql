@@ -1,8 +1,7 @@
 import env from "dotenv";
 import express from "express";
 import fetch from "node-fetch";
-
-// import pool from "./db";
+import pool from "./db.js";
 
 env.config();
 const app = express();
