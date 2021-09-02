@@ -19,6 +19,9 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+app.get("/hello", (req, res) => {
+  res.send("hello world");
+});
 app.get("/get-data", async (req, res) => {
   try {
     const data = await pool.query(`SELECT * from `);
@@ -30,24 +33,6 @@ app.get("/get-data", async (req, res) => {
 
 // inserting data in database
 const insert = async () => {
-  const data = {
-    btcinr: {
-      base_unit: "btc",
-      quote_unit: "inr",
-      low: 3622189,
-      high: "3740000.0",
-      last: "3686740.0",
-      type: "SPOT",
-      open: 3656989,
-      volume: "431.90578",
-      sell: "3698502.0",
-      buy: "3686750.0",
-      at: 1630531804,
-      name: "BTC/INR",
-    },
-  };
-  let value = Object.values(data);
-  console.log(value);
   const jsonResult = await fetch("https://api.wazirx.com/api/v2/tickers");
   const result = await jsonResult.json();
   const values = Object.values(result);
