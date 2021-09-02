@@ -23,18 +23,19 @@ app.get("/get-data", async (req, res) => {
   try {
     console.log("getting data");
     const data = await pool.query(`SELECT * from blockchain_tb`);
-    res.status(200).send({ data });
+    res.status(200).send({ data, db: process.env.DATABASE_URL });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: "server error" });
+    res.send({ message: "server error", db: process.env.DATABASE_URL });
   }
 });
 
+// heroku addons:create heroku-postgresql:hobby-dev -a postgresql-internship
 // inserting data in database
 const insert = async () => {
   const jsonResult = await fetch("https://api.wazirx.com/api/v2/tickers");
   const result = await jsonResult.json();
-  const values = Object.values(result);
+  const values = Object.values(result).slice(0, 10);
   console.log(values);
   const data = null;
   await values.forEach(async (item, index) => {
@@ -54,6 +55,7 @@ const insert = async () => {
 app.get("/hello", (req, res) => {
   res.send("hello world ");
 });
+
 app.get("/insert-data", async (req, res) => {
   try {
     await insert();
