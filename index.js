@@ -32,7 +32,7 @@ app.get("/get-data", async (req, res) => {
   try {
     console.log("getting data");
     const data = await pool.query(`SELECT * from blockchain_tb`);
-    console.log(data)
+    console.log(data);
     res.status(200).send({ data: data.rows, db: process.env.DATABASE_URL });
   } catch (error) {
     console.log(error);
