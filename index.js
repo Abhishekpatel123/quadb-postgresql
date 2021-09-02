@@ -7,6 +7,15 @@ env.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+pool.on("connect", (err, client) => {
+  if (err) console.log(err, "error ");
+  console.log("succesfully db connected ");
+});
+
+pool.on("error", (err, client) => {
+  console.log(err, "error in db connection");
+});
+
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,7 +32,8 @@ app.get("/get-data", async (req, res) => {
   try {
     console.log("getting data");
     const data = await pool.query(`SELECT * from blockchain_tb`);
-    res.status(200).send({ data, db: process.env.DATABASE_URL });
+    console.log(data)
+    res.status(200).send({ data: data.rows, db: process.env.DATABASE_URL });
   } catch (error) {
     console.log(error);
     res.send({ message: "server error", db: process.env.DATABASE_URL });
@@ -36,13 +46,9 @@ const insert = async () => {
   const jsonResult = await fetch("https://api.wazirx.com/api/v2/tickers");
   const result = await jsonResult.json();
   const values = Object.values(result).slice(0, 10);
-  console.log(values);
-  const data = null;
+  let data = null;
   await values.forEach(async (item, index) => {
-    // console.log(item.values());
-    console.log("item ", item);
     if (index === 10) return;
-    // console.log(item)
     data = await pool.query(
       `INSERT INTO blockchain_tb( name, last, buy, sell, volume, base_unit )
          VALUES($1, $2 , $3 , $4 , $5 , $6) RETURNING *`,

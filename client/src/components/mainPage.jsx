@@ -10,12 +10,23 @@ import Banner from "../assets/images/BannerFTXNews.d0cd974b.png";
 
 export default function MainPage() {
   const [data, setData] = useState([]);
+  const logos = [
+    crypto,
+    wazirX,
+    bitbns,
+    giotus,
+    Colodax,
+    Zebpay,
+    CoinDCX,
+    Banner,
+  ];
 
   useEffect(() => {
     fetch("/get-data")
       .then((result) => result.json())
       .then((result) => {
-        setData(result.data.data);
+        console.log(result.data);
+        setData(result.data);
       });
   }, []);
 
@@ -119,11 +130,11 @@ export default function MainPage() {
           </thead>
 
           <tbody>
-            {data?.map((item) => {
+            {data?.map((item, index) => {
               return (
                 <tr>
                   <td class="align-middle">
-                    <h4 class="table-text">1</h4>
+                    <h4 class="table-text">{index + 1}</h4>
                   </td>
 
                   <td className="align-middle">
@@ -134,29 +145,31 @@ export default function MainPage() {
                     >
                       <h4 className="table-text">
                         <img
-                          src={wazirX}
+                          src={logos[Math.floor(Math.random() * logos.length)]}
                           alt=""
                           srcset=""
                           className="exchange-logo"
                         />
-                        <span class="exchange-name ">WazirX</span>
+                        <span class="exchange-name ">{item.name}</span>
                       </h4>
                     </a>
                   </td>
 
                   <td class="align-middle">
-                    <h4 class="table-text">₹ 37,29,490</h4>
+                    <h4 class="table-text">₹ {item.last}</h4>
                   </td>
                   <td class="align-middle">
                     <h4 class="table-text">
-                      <span>₹ 37,29,489 / ₹ 37,29,490</span>
+                      <span>
+                        ₹ {item.buy} / ₹ {item.sell}
+                      </span>
                     </h4>
                   </td>
                   <td class="align-middle">
                     <h4 class="table-text color-green">0.18 %</h4>
                   </td>
                   <td class="align-middle">
-                    <h4 class="table-text color-green">▲ ₹ 6,746</h4>
+                    <h4 class="table-text color-green">▲ ₹ {item.volume}</h4>
                   </td>
                 </tr>
               );
