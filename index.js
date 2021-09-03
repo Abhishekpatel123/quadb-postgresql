@@ -33,12 +33,12 @@ app.get("/get-data", async (req, res) => {
     console.log("getting data");
     const client = await pool.connect();
 
-    const data = await client.query('SELECT * FROM blockchain_tb');
+    const data = await client.query("SELECT * FROM blockchain_tb");
     console.log(data);
     res.status(200).send({ data: data.rows, db: process.env.DATABASE_URL });
   } catch (error) {
     console.log(error);
-    res.send({ message: "server error", error });
+    res.status(500).send({ message: "server error", error });
   }
 });
 
