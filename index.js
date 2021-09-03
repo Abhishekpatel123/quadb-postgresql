@@ -50,7 +50,6 @@ const insert = async () => {
   const values = Object.values(result).slice(0, 10);
   let data = null;
   await values.forEach(async (item, index) => {
-    if (index === 10) return;
     data = await pool.query(
       `INSERT INTO blockchain_tb( name, last, buy, sell, volume, base_unit )
          VALUES($1, $2 , $3 , $4 , $5 , $6) RETURNING *`,
