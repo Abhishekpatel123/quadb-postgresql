@@ -10,6 +10,7 @@ import Banner from "../assets/images/BannerFTXNews.d0cd974b.png";
 
 export default function MainPage() {
   const [data, setData] = useState([]);
+  
   const tableHead = [
     "#",
     "Platform",
